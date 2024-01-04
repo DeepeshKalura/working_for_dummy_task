@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:demo_database/src/model/dummy_order.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,34 +19,75 @@ class DummyDatabaseOrder {
     );
   }
 
-  Future<String> putorder() async {
+  Future<void> giveOrder() async {
     getDummyOrder();
-    var result = "unscussfull";
     try {
-      var response = http.post(Uri.parse("${firebaseUrl}orders.json"),
+      var response = await http.post(Uri.parse("${firebaseUrl}orders.json"),
           body: dummyOrder!.toJson(),
           headers: <String, String>{
             'content-Type': 'application/json; charset=utf-8'
           });
-      print("Sending response to the internet");
-      var res = await response;
-      if (res.statusCode == 200 ||
-          res.statusCode == 201 ||
-          res.statusCode == 202) {
-        result = "Scussessfull";
-      } else {
-        result = res.reasonPhrase ?? "error here";
-      }
+      print(response.body);
     } catch (e) {
-      result = e.toString();
       print(e.toString());
     }
-    return result;
+  }
+
+  Future<void> seeOrder() async {
+    try {
+      var response = await http.get(Uri.parse("${firebaseUrl}orders.json"));
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> deleteOrder() async {
+    try {
+      var response = await http.delete(Uri.parse("${firebaseUrl}orders.json"));
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> updateOrder() async {
+    var updateDummyOrder = DummyOrder(
+      id: "1",
+      name: "DummyFood",
+      image: imageUrl,
+      price: "300",
+      quantity: "3",
+    );
+
+    try {
+      var response = await http.put(Uri.parse("${firebaseUrl}orders.json"),
+          body: updateDummyOrder.toJson(),
+          headers: <String, String>{
+            'content-Type': 'application/json; charset=utf-8'
+          });
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
 
 void main(List<String> args) async {
   final dummyDatabaseOrder = DummyDatabaseOrder();
 
-  print(await dummyDatabaseOrder.putorder());
+  // first i am creating an order
+  await dummyDatabaseOrder.giveOrder();
+
+  // then i will see my order
+
+  await dummyDatabaseOrder.seeOrder();
+
+  // then i will update my order
+
+  await dummyDatabaseOrder.updateOrder();
+
+  // then i am deleting an order
+
+  await dummyDatabaseOrder.deleteOrder();
 }
