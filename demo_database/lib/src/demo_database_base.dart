@@ -47,7 +47,7 @@ class DummyDatabaseOrder {
   Future<void> deleteOrder() async {
     try {
       var response = await http.delete(Uri.parse("${firebaseUrl}orders.json"));
-      print(response.body);
+      print(response.body + response.statusCode.toString());
     } catch (e) {
       print(e.toString());
     }
