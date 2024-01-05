@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 class DummyDatabaseOrder {
   final firebaseUrl =
       "https://hackaholic-a793a-default-rtdb.asia-southeast1.firebasedatabase.app/";
+
+  // dummy data
   String imageUrl =
       "https://images.pexels.com/photos/14866387/pexels-photo-14866387.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
